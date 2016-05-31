@@ -94,6 +94,7 @@ class mydataplot(object):
             res2[i] = trans(res2[i], rd)
             self.insertdata(table2, res2[i])
         self.dbcommit()
+
     def createtable(self, tablename):
         self.cur.execute("create tpython  rosbagable if not exists %s (timestamp bigint, x float, y float, z float)" % tablename)
         self.dbcommit()
@@ -111,8 +112,8 @@ class mydataplot(object):
     def getdata(self, tablename):
         self.cur.execute("select * from %s" % tablename)
         result = self.cur.fetchall()
-        return result
 
+        return result
 
 def computederlta(res1, res2):
     deltax = []
