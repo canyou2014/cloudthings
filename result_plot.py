@@ -74,7 +74,20 @@ def loadTxt1(filename):
             print "ValueError at %d" % i
     f.close()
     return dataset
-
+def loadTxt2(filename):
+    dataset = []
+    f = open(filename, 'r')
+    lines = f.readlines()
+    for line in lines:
+        dataset.append(line.split("\t"))
+    for i in range(len(dataset)):
+        try:
+            for j in range(len(dataset[i])):
+                dataset[i][j] = float(dataset[i][j])
+        except ValueError, e:
+            print "ValueError at %d" % i
+    f.close()
+    return dataset
 class mydataplot(object):
     def __init__(self, dbname):
         self.con = MySQLdb.connect(host='localhost',user='rsoot',passwd='23143425',db=dbname)
@@ -230,16 +243,43 @@ def plottraj():
     resmat2 = np.mat(res2)
     plt.figure(figsize=(10,10))
     plt.plot(resmat1[:, 1], resmat1[:, 2], label="groundtruth")
-    plt.plot(resmat2[:, 1], resmat2[:, 2], label="okvis")
-    plt.plot(resmat3[:, 1], resmat3[:, 2], label="rovio")
+    # plt.plot(resmat2[:, 1], resmat2[:, 2], label="okvis")
+    # plt.plot(resmat3[:, 1], resmat3[:, 2], label="rovio")
+    res4 = loadTxt("/home/lyw/mycode/kalman_fusion/predict.txt")
+    resmat4 = np.mat(res4)
+    plt.plot(resmat4[:, 1], resmat4[:, 2], label="dd")
+
     plt.title("raw trajectory")
     plt.xlabel("x(m)")
     plt.ylabel("y(m)")
     plt.legend()
     plt.show()
 
+def sdasdad():
+    res1 = loadCsv("/home/lyw/mycode/CB/endmsf/ground_m_data.csv")
+    res2 = loadTxt2("/home/lyw/mycode/CB/endmsf/predict.txt")
+    # res3 = loadTxt2("/home/lyw/mycode/mymsf/predict_scale.txt")
+    resmat2 = np.mat(res2)
+    resmat1 = np.mat(res1)
+    # resmat3 = np.mat(res3)
+    for i in range(1,len(resmat1[:,1])):
+         resmat1[i,1] -= resmat1[0,1]
+         resmat1[i,2] -= resmat1[0,2]
+         resmat1[i,3] -= resmat1[0,3]
+    for i in range(1,len(resmat2[:,1])):
+         resmat2[i,0] -= resmat2[0,0]
+         resmat2[i,1] -= resmat2[0,1]
+         resmat2[i,2] -= resmat2[0,2]
+
+    plt.plot(resmat1[1:, 1], resmat1[1:, 2], label="ground_truth")
+
+    plt.plot(resmat2[1:, 0], resmat2[1:, 1], label="predict")
+    plt.figure()
+    plt.plot(range(len(resmat2[:, 3])), resmat2[:, 3], label="scale")
+    plt.legend()
+    plt.show()
 if __name__ == '__main__':
-    compareplot()
-    # plottraj()
+
+    sdasdad()
     pass
 

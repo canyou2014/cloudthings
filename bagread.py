@@ -6,12 +6,12 @@ import matplotlib.pyplot as plt
 x = []
 y = []
 z = []
-f = open("rovio_result.txt", "w")
-rbag = rosbag.Bag('/home/lyw/MyDocuments/result.bag')
-
+f = open("dynamic.txt", "w")
+# rbag = rosbag.Bag('/home/lyw/MyDocuments/result.bag')
+rbag = rosbag.Bag('/home/lyw/datasets/dynamic/dynamic.bag')
 for topic,msg,t in rbag.read_messages():
-    if topic == "/rovio/odometry":
-
+    # if topic == "/rovio/odometry":
+    if topic == "/imu0":
         x.append(msg.pose.pose.position.x)
         y.append(msg.pose.pose.position.y)
         z.append(msg.pose.pose.position.z)
